@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="WrapPanel.Example.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WrapPanel.Example"
+    xmlns:wp="using:WrapPanel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.ColumnSpan="3">
+            <wp:WrapPanel ItemsSource="{x:Bind Blocks, Mode=OneWay}">
+                <wp:WrapPanel.ItemTemplate>
+                    <DataTemplate x:DataType="local:Block">
+                        <Border Background="Black" Width="100" Height="{x:Bind Size}" Margin="10">
+                            <TextBlock Foreground="White" Text="{x:Bind Number, Mode=OneWay}" />
+                        </Border>
+                    </DataTemplate>
+                </wp:WrapPanel.ItemTemplate>
+            </wp:WrapPanel>
+        </ScrollViewer>
+
+        <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="Add Block" Command="{x:Bind AddBlockCommand}" />
+        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="Order by number" Command="{x:Bind OrderByNumberCommand}" />
+        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Content="Order by size" Command="{x:Bind OrderBySizeCommand}" />
+    </Grid>
+</Page>
