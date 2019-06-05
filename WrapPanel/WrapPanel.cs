@@ -9,10 +9,17 @@ using Windows.UI.Xaml.Controls;
 
 namespace WrapPanel
 {
+    /// <summary>
+    /// Represents a control that can be used to present a collection of items in wrapped layout.
+    /// </summary>
     public class WrapPanel : Panel
     {
+        /// <summary>Dictionary containing all children with their positions.</summary>
         private readonly IDictionary<FrameworkElement, int> elementPositions;
 
+        /// <summary>
+        /// The object source used to generate the content of the WrapPanel.
+        /// </summary>
         public IEnumerable ItemsSource
         {
             get { return (IEnumerable)GetValue(ItemsSourceProperty); }
@@ -21,6 +28,9 @@ namespace WrapPanel
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(WrapPanel), new PropertyMetadata(null, ItemsSource_Changed));
 
+        /// <summary>
+        /// The DataTemplate used to display each item.
+        /// </summary>
         public DataTemplate ItemTemplate
         {
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }
@@ -29,46 +39,59 @@ namespace WrapPanel
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(WrapPanel), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Initializes a new instance of the WrapPanel.WrapPanel class.
+        /// </summary>
         public WrapPanel()
         {
             elementPositions = new Dictionary<FrameworkElement, int>();
         }
 
+        /// <summary>
+        /// Updates the size of all children of this panel.
+        /// </summary>
+        /// <param name="availableSize">The available size for this panel.</param>
+        /// <returns>The computed available size.</returns>
         protected override Size MeasureOverride(Size availableSize)
         {
-            // Just take up all of the width
+            // Take the full available width
             Size finalSize = new Size { Width = double.IsInfinity(availableSize.Width) ? int.MaxValue : availableSize.Width };
             double x = 0d;
             double rowHeight = 0d;
             foreach (FrameworkElement child in GetChildrenOrdered())
             {
-                // Tell the child control to determine the size needed
+                // Determine which size the child needs
                 child.Measure(availableSize);
 
                 x += child.DesiredSize.Width;
                 if (x > availableSize.Width)
                 {
-                    // this item will start the next row
+                    // A new row, start over with X
                     x = child.DesiredSize.Width;
 
-                    // adjust the height of the panel
+                    // Adjust the size of the panel
                     finalSize.Height += rowHeight;
                     rowHeight = child.DesiredSize.Height;
                 }
                 else
                 {
-                    // Get the tallest item
+                    // Set the height based on the largest item
                     rowHeight = Math.Max(child.DesiredSize.Height, rowHeight);
                 }
             }
             if (double.IsInfinity(availableSize.Width))
                 finalSize.Width = x;
 
-            // Add the final height
+            // Set the final height
             finalSize.Height += rowHeight;
             return finalSize;
         }
 
+        /// <summary>
+        /// Positions and determines the size of the panel's children.
+        /// </summary>
+        /// <param name="finalSize">The final size computed by the parent for this panel.</param>
+        /// <returns>The computed final size of the panel.</returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
             Rect finalRect = new Rect(0, 0, finalSize.Width, finalSize.Height);
@@ -78,7 +101,7 @@ namespace WrapPanel
             {
                 if ((child.DesiredSize.Width + finalRect.X) > finalSize.Width)
                 {
-                    // next row!
+                    // Move it to the next row
                     finalRect.X = 0;
                     finalRect.Y += rowHeight;
                     rowHeight = 0;
@@ -86,24 +109,33 @@ namespace WrapPanel
                 // Place the item
                 child.Arrange(new Rect(finalRect.X, finalRect.Y, child.DesiredSize.Width, child.DesiredSize.Height));
 
-                // adjust the location for the next items
+                // Adjust the location for the next items
                 finalRect.X += child.DesiredSize.Width;
                 rowHeight = Math.Max(child.DesiredSize.Height, rowHeight);
             }
             return finalSize;
         }
 
-        private static void ItemsSource_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Handle the ItemsSource changed.
+        /// </summary>
+        /// <param name="dependencyObject">The instance the ItemsSource changed on.</param>
+        /// <param name="eventArgs">Data describing the changes.</param>
+        private static void ItemsSource_Changed(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs eventArgs)
         {
-            WrapPanel instance = d as WrapPanel;
-            if (e.NewValue != null)
+            WrapPanel instance = dependencyObject as WrapPanel;
+            if (eventArgs.NewValue != null)
             {
-                if (e.OldValue != null)
-                    instance.ItemsSource_CollectionChanged(instance, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, ((IEnumerable)e.OldValue).Cast<object>().ToList()));
+                if (eventArgs.OldValue != null)
+                    instance.ItemsSource_CollectionChanged(instance, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, ((IEnumerable)eventArgs.OldValue).Cast<object>().ToList()));
                 instance.RegisterCollectionChanged();
             }
         }
 
+        /// <summary>
+        /// If the ItemsSource implements the INotifyCollectionChanged 
+        /// it will register a handler to the CollectionChanged event.
+        /// </summary>
         private void RegisterCollectionChanged()
         {
             int i = -1;
@@ -113,6 +145,11 @@ namespace WrapPanel
                 incc.CollectionChanged += ItemsSource_CollectionChanged;
         }
 
+        /// <summary>
+        /// Handles collection changes and reflect those to the panel.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event arguments of the colection changed event.</param>
         private void ItemsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -172,6 +209,10 @@ namespace WrapPanel
             InvalidateArrange();
         }
 
+        /// <summary>
+        /// Returns all children of the panel ordered by position.
+        /// </summary>
+        /// <returns>Ordered children collection.</returns>
         private IEnumerable<FrameworkElement> GetChildrenOrdered()
         {
             return Children.Where(c => c is FrameworkElement).Select(c => (FrameworkElement)c).OrderBy(c =>
@@ -183,16 +224,21 @@ namespace WrapPanel
             }).ToList();
         }
 
-        private void AddItem(object item, int index)
+        /// <summary>
+        /// Adds an item to the panel.
+        /// </summary>
+        /// <param name="dataContext">The datacontext for the item to add.</param>
+        /// <param name="position">The position for the item.</param>
+        private void AddItem(object dataContext, int position)
         {
             var childToAdd = new ContentControl
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                DataContext = item,
+                DataContext = dataContext,
                 ContentTemplate = ItemTemplate
             };
-            elementPositions[childToAdd] = index;
+            elementPositions[childToAdd] = position;
             Children.Add(childToAdd);
         }
     }
