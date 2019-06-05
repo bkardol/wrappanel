@@ -20,17 +20,57 @@
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.ColumnSpan="3">
-            <wp:WrapPanel ItemsSource="{x:Bind Blocks, Mode=OneWay}">
-                <wp:WrapPanel.ItemTemplate>
-                    <DataTemplate x:DataType="local:Block">
-                        <Border Background="Black" Width="100" Height="{x:Bind Size}" Margin="10">
-                            <TextBlock Foreground="White" Text="{x:Bind Number, Mode=OneWay}" />
-                        </Border>
-                    </DataTemplate>
-                </wp:WrapPanel.ItemTemplate>
-            </wp:WrapPanel>
-        </ScrollViewer>
+        <Pivot Grid.ColumnSpan="3">
+            <PivotItem Header="WrapPanel">
+                <ScrollViewer>
+                    <wp:WrapPanel ItemsSource="{x:Bind Blocks, Mode=OneWay}">
+                        <wp:WrapPanel.ItemTemplate>
+                            <DataTemplate x:DataType="local:Block">
+                                <Border Background="Black" Width="100" Height="{x:Bind Size}" Margin="10">
+                                    <TextBlock Foreground="White" Text="{x:Bind Number, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
+                                </Border>
+                            </DataTemplate>
+                        </wp:WrapPanel.ItemTemplate>
+                    </wp:WrapPanel>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="VariableSizedWrapGrid">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{x:Bind Blocks, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:Block">
+                                <Border Background="Black" Width="100" Height="{x:Bind Size}" Margin="10">
+                                    <TextBlock Foreground="White" Text="{x:Bind Number, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VariableSizedWrapGrid Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="ItemsWrapGrid">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{x:Bind Blocks, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:Block">
+                                <Border Background="Black" Width="100" Height="{x:Bind Size}" Margin="10">
+                                    <TextBlock Foreground="White" Text="{x:Bind Number, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </PivotItem>
+        </Pivot>
 
         <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="Add Block" Command="{x:Bind AddBlockCommand}" />
         <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="Order by number" Command="{x:Bind OrderByNumberCommand}" />
