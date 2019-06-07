@@ -18,13 +18,11 @@ xmlns:wp="using:WrapPanel"
 After, you can start using the WrapPanel:
 ```xml
 <wp:WrapPanel ItemsSource="{x:Bind Blocks, Mode=OneWay}">
-	<wp:WrapPanel.ItemTemplate>
-		<DataTemplate x:DataType="local:Block">
-			<Border Background="Black" Width="100" Height="{x:Bind Size}" Margin="10">
-				<TextBlock Foreground="White" Text="{x:Bind Number, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
-			</Border>
-		</DataTemplate>
-	</wp:WrapPanel.ItemTemplate>
+  <wp:WrapPanel.ItemTemplate>
+    <DataTemplate x:DataType="local:Block">
+      <Border Background="Black" Width="100" Height="100" Margin="10" />
+    </DataTemplate>
+  </wp:WrapPanel.ItemTemplate>
 </wp:WrapPanel>
 ```
 
