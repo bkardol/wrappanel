@@ -1,5 +1,7 @@
 Welcome to the WrapPanel repository!
 
+[![NuGet Downloads](https://img.shields.io/nuget/dt/WrapPanel.UWP.svg)](https://img.shields.io/nuget/dt/WrapPanel.UWP.svg)
+
 # Info
 As the VariableSizedWrapGrid and ItemsWrapGrid both take either user defined sizes or take the size of the first child it isn't easy to display a collection of items with various sizes.
 Exactly for this case I built the WrapPanel.
