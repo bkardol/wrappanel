@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>WrapPanel.UWP</id>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <title>UWP WrapPanel</title>
     <authors>Bart Kardol</authors>
     <owners>Bart Kardol</owners>
@@ -10,7 +10,7 @@
 	<license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A control that can be used to present a collection of items in wrapped layout.</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>WrapPanel now supports any generic IEnumerable collection and properly handles a collection reset.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>uwp wrappanel wrap panel xaml</tags>
 	<dependencies>
