@@ -4,7 +4,7 @@ Welcome to the WrapPanel repository!
 
 # Info
 As the VariableSizedWrapGrid and ItemsWrapGrid both take either user defined sizes or take the size of the first child it isn't easy to display a collection of items with various sizes.
-Exactly for this case I built the WrapPanel.
+The WrapPanel control is created to support these circumstances.
 
 The repository contains two directories:
 * WrapPanel, containing the source of the WrapPanel itself;
