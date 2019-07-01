@@ -5,4 +5,4 @@
 
 Publish package:
 - Open Developer Command Prompt and navigate to the NuGet directory;
-- Run command 'nuget push WrapPanel.UWP.<VERSION>.nupkg <API_KEY>'
+- Run command 'nuget push WrapPanel.UWP.<VERSION>.nupkg <API_KEY> -src https://www.nuget.org/packages/WrapPanel.UWP/'
