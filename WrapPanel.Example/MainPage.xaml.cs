@@ -33,6 +33,7 @@ namespace WrapPanel.Example
 
         private void OrderBlocks(bool orderByNumber)
         {
+			Blocks.Clear();
             var orderedBlocks = Blocks.OrderBy(b => orderByNumber ? b.Number : b.Size).ToList();
             for(int newIndex = 0; newIndex < orderedBlocks.Count; newIndex++)
             {
